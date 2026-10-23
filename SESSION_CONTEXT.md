@@ -40,7 +40,7 @@ Single source of truth for cross-session handoff between OpenCode, Claude Code, 
 - Prompt 6 assessment & consent: complete — `src/server/actions/assessments.ts` (create/update/complete with authorize+validate+audit, compositeAvailable false), `src/app/protected/assessments/{list,new,[id]}/page.tsx` (org-scoped list, patient selection + consent, session detail with cognitive observations), `src/components/assessment-form.tsx` + `src/components/assessment-starter.tsx` (client forms), `src/components/consent-disclosure.tsx` (placeholder policy), `tests/assessments.test.ts` (modality statuses, composite unavailable, scope isolation). 29 tests total passing. typecheck/lint/build exit 0.
 
 ## Next step
-Prompt 7 — Speech capture: user approved voice chat, but no provider credentials/consent/retention approved, so implement LOCAL-ONLY demo capture with explicit warning, no upload, no audio logging, media lifecycle + failure states.
+Prompt 8 — Gait capture: no validated gait protocol approved, so implement LOCAL-ONLY demo capture workflow with explicit protocol documentation and "no clinical inference" warning, no video persistence, media lifecycle + failure states.
 
 ## Quality gate status (last run)
-- typecheck: 0 | lint: 0 | test: 29 passed | build: 0
+- typecheck: 0 | lint: 0 | test: 31 passed | build: 0

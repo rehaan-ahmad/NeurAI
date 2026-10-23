@@ -8,6 +8,7 @@ const nav = [
   { href: "/patients", label: "Patients" },
   { href: "/assessments", label: "Assessments" },
   { href: "/speech", label: "Speech capture" },
+  { href: "/gait", label: "Gait capture" },
   { href: "/results", label: "Results" },
   { href: "/admin", label: "Admin" },
 ];
