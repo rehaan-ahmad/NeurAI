@@ -55,3 +55,8 @@ Frontend targets Vercel. Backend: Supabase (proposed default) — do not provisi
 
 ## Repo
 `git@github.com:rehaan-ahmad/NeurAI.git`
+
+
+## 📄 License
+
+This project is **UNLICENSED** — proprietary to Diya Sharma and Rehaan Ahmad. All rights reserved.
