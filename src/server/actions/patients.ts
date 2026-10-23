@@ -5,22 +5,22 @@
 // an audit event. Demo mode uses synthetic fixtures only.
 
 import { authorize } from "@/server/auth/authorize";
-import { recordAudit } from "@/lib/audit";
+import { recordAudit } from "@/server/persistence/audit";
+import { getPatientRepository } from "@/server/persistence";
 import {
   validatePatient,
   ValidationError,
 } from "@/lib/validation";
-import { demoRepositories } from "@/lib/demo/adaptor";
 import type { Patient } from "@/types/domain";
 
 export async function listPatientsAction() {
   const { organizationId } = authorize({ requiredRole: "clinician" });
-  return demoRepositories.patients.listByOrganization(organizationId);
+  return getPatientRepository().listByOrganization(organizationId);
 }
 
 export async function getPatientAction(id: string) {
   const session = authorize({ requiredRole: "clinician" });
-  return demoRepositories.patients.getById(id, session.organizationId);
+  return getPatientRepository().getById(id, session.organizationId);
 }
 
 export async function createPatientAction(formData: FormData) {
@@ -41,7 +41,7 @@ export async function createPatientAction(formData: FormData) {
     }
     throw error;
   }
-  const created = await demoRepositories.patients.create(patient);
+  const created = await getPatientRepository().create(patient);
   recordAudit({
     action: "patient.create",
     actorId: session.user.id,
@@ -58,7 +58,7 @@ export async function updatePatientAction(
   formData: FormData,
 ) {
   const session = authorize({ requiredRole: "clinician" });
-  const existing = await demoRepositories.patients.getById(
+  const existing = await getPatientRepository().getById(
     id,
     session.organizationId,
   );
@@ -73,7 +73,7 @@ export async function updatePatientAction(
   if (gender !== null) patch.gender = String(gender) as Patient["gender"];
 
   try {
-    const updated = await demoRepositories.patients.update(
+    const updated = await getPatientRepository().update(
       id,
       session.organizationId,
       patch,
@@ -97,7 +97,7 @@ export async function updatePatientAction(
 
 export async function deletePatientAction(id: string) {
   const session = authorize({ requiredRole: "admin" });
-  await demoRepositories.patients.softDelete(id, session.organizationId);
+  await getPatientRepository().softDelete(id, session.organizationId);
   recordAudit({
     action: "patient.delete",
     actorId: session.user.id,

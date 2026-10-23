@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-type Patient = { id: string; displayId: string };
 type Assessment = {
   id: string;
   patientId: string;

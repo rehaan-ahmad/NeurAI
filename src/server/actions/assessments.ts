@@ -6,26 +6,26 @@
 // calculated; resultProvenance.compositeAvailable stays false.
 
 import { authorize } from "@/server/auth/authorize";
-import { recordAudit } from "@/lib/audit";
+import { recordAudit } from "@/server/persistence/audit";
+import { getAssessmentRepository } from "@/server/persistence";
 import {
   validateAssessmentSession,
   ValidationError,
 } from "@/lib/validation";
-import { demoRepositories } from "@/lib/demo/adaptor";
 import type {
   AssessmentSession,
   CognitiveTestObservation,
 } from "@/types/domain";
 export async function listAssessmentsAction() {
   const session = authorize({ requiredRole: "clinician" });
-  return demoRepositories.assessments.listAllByOrganization(
+  return getAssessmentRepository().listAllByOrganization(
     session.organizationId,
   );
 }
 
 export async function getAssessmentAction(id: string) {
   const session = authorize({ requiredRole: "clinician" });
-  return demoRepositories.assessments.getById(id, session.organizationId);
+  return getAssessmentRepository().getById(id, session.organizationId);
 }
 
 export async function createAssessmentAction(formData: FormData) {
@@ -56,7 +56,7 @@ export async function createAssessmentAction(formData: FormData) {
     }
     throw error;
   }
-  const created = await demoRepositories.assessments.create(assessment);
+  const created = await getAssessmentRepository().create(assessment);
   recordAudit({
     action: "assessment.create",
     actorId: session.user.id,
@@ -73,7 +73,7 @@ export async function updateObservationAction(
   formData: FormData,
 ) {
   const session = authorize({ requiredRole: "clinician" });
-  const existing = await demoRepositories.assessments.getById(
+  const existing = await getAssessmentRepository().getById(
     assessmentId,
     session.organizationId,
   );
@@ -104,7 +104,7 @@ export async function updateObservationAction(
     observation,
   ];
 
-  const updated = await demoRepositories.assessments.update(assessmentId, session.organizationId, {
+  const updated = await getAssessmentRepository().update(assessmentId, session.organizationId, {
     cognitiveTests,
   } as Partial<AssessmentSession>);
   recordAudit({
@@ -120,13 +120,13 @@ export async function updateObservationAction(
 
 export async function completeAssessmentAction(assessmentId: string) {
   const session = authorize({ requiredRole: "clinician" });
-  const existing = await demoRepositories.assessments.getById(
+  const existing = await getAssessmentRepository().getById(
     assessmentId,
     session.organizationId,
   );
   if (!existing) return { error: "Assessment not found" };
 
-  const updated = await demoRepositories.assessments.update(assessmentId, session.organizationId, {
+  const updated = await getAssessmentRepository().update(assessmentId, session.organizationId, {
     status: "completed",
     resultProvenance: {
       ...existing.resultProvenance,

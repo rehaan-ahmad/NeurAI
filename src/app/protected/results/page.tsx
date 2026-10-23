@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { listPatientsAction } from "@/server/actions/patients";
-import { listAssessmentsAction, getAssessmentAction } from "@/server/actions/assessments";
-import ResultBreakdown from "@/components/result-breakdown";
+import { listAssessmentsAction } from "@/server/actions/assessments";
 type Patient = { id: string; displayId: string };
 type Assessment = { id: string; patientId: string; status: string; createdAt: string };
 

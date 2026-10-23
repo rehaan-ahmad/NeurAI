@@ -5,6 +5,7 @@
 import type {
   AssessmentSession,
   Patient,
+  Role,
   User,
 } from "@/types/domain";
 
@@ -30,6 +31,7 @@ export interface AssessmentRepository {
     organizationId: string,
     patch: Partial<AssessmentSession>,
   ): Promise<AssessmentSession>;
+  listAllByOrganization(organizationId: string): Promise<AssessmentSession[]>;
 }
 
 export interface AuthRepository {
@@ -42,7 +44,7 @@ export interface AuditRepository {
   record(entry: {
     action: string;
     actorId: string;
-    actorRole: string;
+    actorRole: Role;
     organizationId: string;
     patientId?: string;
     outcome: "success" | "denied" | "error";
