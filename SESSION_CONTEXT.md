@@ -25,9 +25,9 @@ This file is the single source of truth for cross-session handoff between OpenCo
 - `NeurAI Rebuild Kit.md` — product brief + 15-prompt sequence + decision questions (renamed from AI-MIND Rebuild Kit.md).
 - `SESSION_CONTEXT.md` — this file; update on every change.
 
-## Docs (to create)
+## Docs (created)
 - `docs/PRODUCT_DECISIONS.md` — confirmed answers vs assumptions.
 - `docs/ARCHITECTURE.md` — Next.js App Router + Vercel + Supabase; Gemini/Grok adapter; voice chat; multi-tenant.
 
 ## Last change
-Initial setup: git init, commit context files, push to GitHub main. Next: Prompt 0/1 (plan + decisions/architecture docs), then Prompt 2 foundation.
+Committed rebrand + docs + Prompt 2 foundation (Next.js 16 + TS + Tailwind, Inter, env validation, app shell, loading/error/not-found, .env.example, README, .gitignore). typecheck/lint/build all pass (exit 0). Pushed to origin main. Next: Prompt 3 (domain types, validation, demo boundary).
