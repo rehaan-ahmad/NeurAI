@@ -39,8 +39,10 @@ Single source of truth for cross-session handoff between OpenCode, Claude Code, 
 - Prompt 5 patient workflow: complete — `src/app/protected/patients/{list,create,[id]}/page.tsx` (searchable/filterable list, create with validation errors, detail/timeline), `src/server/actions/patients.ts` (server actions with authorize+validate+audit), `src/lib/audit.ts` (append-only audit, no raw payloads). `tests/patients.test.ts` (validation + scope isolation + audit).
 - Prompt 6 assessment & consent: complete — `src/server/actions/assessments.ts` (create/update/complete with authorize+validate+audit, compositeAvailable false), `src/app/protected/assessments/{list,new,[id]}/page.tsx` (org-scoped list, patient selection + consent, session detail with cognitive observations), `src/components/assessment-form.tsx` + `src/components/assessment-starter.tsx` (client forms), `src/components/consent-disclosure.tsx` (placeholder policy), `tests/assessments.test.ts` (modality statuses, composite unavailable, scope isolation). 29 tests total passing. typecheck/lint/build exit 0.
 
+- Prompt 9 results view: complete — `src/app/protected/results/{page,[patientId]/[assessmentId]/page}.tsx` (patient list + transparent per-assessment breakdown), `src/components/result-breakdown.tsx` (modality coverage, cognitive observations, provenance & limitations, "composite result unavailable" banner). Added to shell nav. typecheck/lint/build exit 0; 33 tests passing.
+
 ## Next step
-Prompt 8 — Gait capture: no validated gait protocol approved, so implement LOCAL-ONLY demo capture workflow with explicit protocol documentation and "no clinical inference" warning, no video persistence, media lifecycle + failure states.
+Prompt 10 — Persistence and audit: Supabase adapter (Postgres + RLS + private storage), migrations/indexes, least-privilege rules, backup/deletion approach, append-only audit events; code-level only (not provisioned). Integration tests for access rules and audit coverage.
 
 ## Quality gate status (last run)
-- typecheck: 0 | lint: 0 | test: 31 passed | build: 0
+- typecheck: 0 | lint: 0 | test: 33 passed | build: 0
