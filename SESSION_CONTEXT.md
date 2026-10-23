@@ -7,8 +7,8 @@ Single source of truth for cross-session handoff between OpenCode, Claude Code, 
 - Project name: **NeurAI** (product was AI-MIND; fully rebranded to NeurAI, no AI-MIND branding left).
 - Repo: `git@github.com:rehaan-ahmad/NeurAI.git` — `main` pushed to origin.
 - Working dir: `/home/rehaan-ahmad/projects/NeurAI`
-- Git state: clean. Last commit `e72c372 feat: domain types, validation, demo adaptor, and unit tests (Prompt 3)`. A concurrent commit `96edff0 Include project license details` was rebased in.
-- Status: clean-slate greenfield build.
+- Git state: clean. All 15 kit prompts implemented and committed.
+- Status: pre-release demo prototype (not deployed, no backend provisioned, no credentials).
 
 ## Confirmed product decisions (all 17 answered)
 1. Intended use: Hackathon Judges demo prototype. Screening workflow only; no diagnosis/risk/treatment claims.
@@ -17,34 +17,40 @@ Single source of truth for cross-session handoff between OpenCode, Claude Code, 
 4. Tenancy: multiple clinics (multi-tenant). Org-scoped access.
 5. Data/retention: India best practices; minimum necessary; synthetic dev fixtures; do not persist recordings unless approved.
 9. Risk: no invented composite score/AI care advice unless validated method approved.
-11-13: Supabase (Postgres + Auth + RLS + private storage), code-level only, not provisioned. AI: Gemini + Grok server-side adapter, auto model switching by requirement. Voice chat option. No browser-to-provider calls.
+11-13: Supabase (Postgres + Auth + RLS + private storage), code-level only, not provisioned. AI: Gemini + Grok server-side adapter, auto model switching. Voice chat. No browser-to-provider calls.
 14/17: Public site, Vercel frontend. Rebrand AI-MIND -> NeurAI everywhere.
 16: Build everything from scratch; clean repo.
 
 ## Context files
 - `AGENTS.md` — guardrails (rebranded to NeurAI).
-- `NeurAI Rebuild Kit.md` — product brief + 15 prompts + decision questions (renamed from AI-MIND Rebuild Kit.md).
+- `NeurAI Rebuild Kit.md` — product brief + 15 prompts + decision questions.
 - `SESSION_CONTEXT.md` — this file; update on every change.
+- `NEXT_STEPS.md` — owner-facing next steps + decisions still required.
 
 ## Docs (created)
-- `docs/PRODUCT_DECISIONS.md` — confirmed answers vs assumptions.
-- `docs/ARCHITECTURE.md` — Next.js App Router + Vercel + Supabase; Gemini/Grok adapter; voice chat; multi-tenant.
+- `docs/PRODUCT_DECISIONS.md`, `docs/ARCHITECTURE.md`, `docs/DEPLOYMENT.md`, `docs/SECURITY.md`, `docs/DATA_LIFECYCLE.md`, `CHANGELOG.md`, `README.md`.
 
-## Progress (kit prompts)
-- Prompt 0 reconnaissance: complete (clean repo, no prior source).
-- Prompt 1 decisions/architecture: complete (docs created).
-- Prompt 2 foundation: complete — Next.js 16 + TS + Tailwind v4 + Inter, App Router `src/`, env validation (`src/lib/env.ts`), app shell (`src/components/shell.tsx`), loading/error/not-found states, `.env.example`, README, `.gitignore`. typecheck/lint/build all exit 0.
-- Prompt 3 domain/demo boundary: complete — `src/types/domain.ts`, `src/lib/validation.ts` (dependency-free, throws ValidationError), `src/lib/repositories/index.ts` (interfaces), `src/lib/demo/adaptor.ts` (synthetic fixtures, `demo: true` markers, cross-org scope isolation), `tests/domain.test.ts` (12 passing), `vitest.config.ts` (@/ alias). typecheck/lint/test/build all exit 0.
-- Prompt 4 auth & authorization: complete — `src/server/auth/session.ts` (demo-mode session + fail-closed production Supabase path, no credentials), `src/server/auth/authorize.ts` (server-side identity + role + org/patient scope checks, fail-closed), `src/server/auth/errors.ts` (Unauthorized/Forbidden), `src/app/protected/layout.tsx` (server auth before render), `src/app/protected/dashboard/page.tsx`, `src/app/unauthorized/page.tsx`, `src/app/forbidden/page.tsx`, root public landing. `tests/auth.test.ts` (7 role-boundary tests).
-- Prompt 5 patient workflow: complete — `src/app/protected/patients/{list,create,[id]}/page.tsx` (searchable/filterable list, create with validation errors, detail/timeline), `src/server/actions/patients.ts` (server actions with authorize+validate+audit), `src/lib/audit.ts` (append-only audit, no raw payloads). `tests/patients.test.ts` (validation + scope isolation + audit).
-- Prompt 6 assessment & consent: complete — `src/server/actions/assessments.ts` (create/update/complete with authorize+validate+audit, compositeAvailable false), `src/app/protected/assessments/{list,new,[id]}/page.tsx` (org-scoped list, patient selection + consent, session detail with cognitive observations), `src/components/assessment-form.tsx` + `src/components/assessment-starter.tsx` (client forms), `src/components/consent-disclosure.tsx` (placeholder policy), `tests/assessments.test.ts` (modality statuses, composite unavailable, scope isolation).
-- Prompt 7 speech capture: complete — `src/components/speech-capture.tsx` (local-only demo, no upload/storage/transcription, explicit warning, media lifecycle + failure states), `src/app/protected/speech/page.tsx`, `tests/speech.test.tsx`. Added to shell nav.
-- Prompt 8 gait capture: complete — `src/components/gait-capture.tsx` (local-only demo, protocol documentation, no inference warning, track cleanup, in-memory playback revoked), `src/app/protected/gait/page.tsx`, `tests/gait.test.tsx`. Added to shell nav.
-- Prompt 9 results view: complete — `src/app/protected/results/{page,[patientId]/[assessmentId]/page}.tsx` (patient list + transparent per-assessment breakdown), `src/components/result-breakdown.tsx` (modality coverage, cognitive observations, provenance & limitations, "composite result unavailable" banner). Added to shell nav.
-- Prompt 10 persistence & audit: complete — `src/server/persistence/supabase.ts` (fail-closed client factory), `src/server/persistence/repositories.ts` (Supabase patient/assessment/user repos), `src/server/persistence/rls.sql` (schema + RLS + indexes, not applied automatically), `src/server/persistence/audit.ts` (append-only audit, no raw payloads), `src/server/persistence/index.ts` (repo factory: Supabase when configured, else demo). Server actions wired to factory. `tests/persistence.test.ts` (access rules + scope isolation + audit).
-
-## Next step
-Prompt 11 — AI provider integration: Gemini + Grok server-side adapter with automatic model switching based on requirement, input/output validation, timeout, rate limits, bounded payloads, safe errors, provenance/model version/uncertainty, visible AI-unavailable state, deterministic mocked-provider tests + failure/timeout tests. Disabled until credentials approved.
+## Progress (all 15 kit prompts complete)
+- P0 reconnaissance: clean repo, no prior source.
+- P1 decisions/architecture: docs created.
+- P2 foundation: Next.js 16 + TS + Tailwind v4 + Inter, App Router `src/`, env validation, app shell, loading/error/not-found, `.env.example`, README, `.gitignore`.
+- P3 domain/demo boundary: `src/types/domain.ts`, `src/lib/validation.ts`, `src/lib/repositories/index.ts`, `src/lib/demo/adaptor.ts` (`demo: true` markers), vitest, 12 tests.
+- P4 auth & authorization: server session (demo + fail-closed Supabase), `authorize()` identity/role/org/patient scope, unauthorized/forbidden pages, 7 role tests.
+- P5 patient workflow: list/create/detail, server actions + validate + audit, `src/lib/audit.ts`, 5 tests.
+- P6 assessment & consent: create/update/complete, consent disclosure, modality statuses (missing/not-performed/unavailable/completed), `compositeAvailable: false`, 5 tests.
+- P7 speech capture: local-only demo, no upload/storage/transcription, explicit warning, media lifecycle, 2 tests.
+- P8 gait capture: local-only demo, protocol doc, no inference, no persistence, media lifecycle, 2 tests.
+- P9 results view: transparent breakdown, modality coverage, "composite result unavailable," accessible tables.
+- P10 persistence & audit: Supabase client factory (fail-closed), Supabase repos, `rls.sql` (not applied), append-only audit, repo factory, `tests/persistence.test.ts`.
+- P11 AI provider integration: Gemini + Grok server-side adapter, auto model switching, timeout/rate limits/bounded payloads/safe errors, provenance/uncertainty/review state, AI-unavailable state, mocked-provider/failure/timeout tests.
+- P12 admin & operations: `requireAdmin`, admin page, health/readiness endpoint, planned-features labeling, admin tests.
+- P13 security/privacy/accessibility/quality review: protected unguarded results routes, prod npm audit = 0 vulns.
+- P14 deployment prep: `docs/DEPLOYMENT.md` (documented, not executed).
+- P15 release handoff: README, SECURITY, DATA_LIFECYCLE, CHANGELOG, DEPLOYMENT complete.
 
 ## Quality gate status (last run)
-- typecheck: 0 | lint: 0 | test: 38 passed | build: 0
+- typecheck: 0 | lint: 0 (1 harmless warning in src/app/error.tsx) | test: 44 passed | build: 0
+- `npm audit --production`: 0 vulnerabilities
+
+## Next step (owner-facing)
+See `NEXT_STEPS.md`. Decisions still required: backend (Supabase provision vs demo-only), AI credentials/governance, region/data residency, compliance owner, deploy approval. Nothing is deployed or provisioned until you approve.
