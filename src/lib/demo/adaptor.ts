@@ -144,6 +144,10 @@ export class DemoAssessmentRepository implements AssessmentRepository {
     if (organizationId !== DEMO_ORG_ID) return [];
     return DEMO_SESSIONS.filter((s) => s.patientId === patientId);
   }
+  async listAllByOrganization(organizationId: string): Promise<AssessmentSession[]> {
+    if (organizationId !== DEMO_ORG_ID) return [];
+    return [...DEMO_SESSIONS];
+  }
   async getById(id: string, organizationId: string): Promise<AssessmentSession | null> {
     if (organizationId !== DEMO_ORG_ID) return null;
     return DEMO_SESSIONS.find((s) => s.id === id) ?? null;

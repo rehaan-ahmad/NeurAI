@@ -16,6 +16,8 @@
   --color-border: #e5e7eb;
   --color-danger: #b91c1c;
   --color-danger-subtle: #fbecd9;
+  --color-success: #15803d;
+  --color-success-subtle: #e6f7ee;
 
   --radius: 8px;
   --font-sans: var(--font-inter);
