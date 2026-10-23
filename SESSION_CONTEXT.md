@@ -51,6 +51,7 @@ Single source of truth for cross-session handoff between OpenCode, Claude Code, 
 ## Quality gate status (last run)
 - typecheck: 0 | lint: 0 (1 harmless warning in src/app/error.tsx) | test: 44 passed | build: 0
 - `npm audit --production`: 0 vulnerabilities
+- Added `suppressHydrationWarning` to `<html>` in `src/app/layout.tsx` to silence the Dark Reader browser-extension hydration mismatch (external to our code; not a bug).
 
 ## Next step (owner-facing)
 See `NEXT_STEPS.md`. Decisions still required: backend (Supabase provision vs demo-only), AI credentials/governance, region/data residency, compliance owner, deploy approval. Nothing is deployed or provisioned until you approve.
