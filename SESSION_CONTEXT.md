@@ -35,9 +35,11 @@ Single source of truth for cross-session handoff between OpenCode, Claude Code, 
 - Prompt 1 decisions/architecture: complete (docs created).
 - Prompt 2 foundation: complete — Next.js 16 + TS + Tailwind v4 + Inter, App Router `src/`, env validation (`src/lib/env.ts`), app shell (`src/components/shell.tsx`), loading/error/not-found states, `.env.example`, README, `.gitignore`. typecheck/lint/build all exit 0.
 - Prompt 3 domain/demo boundary: complete — `src/types/domain.ts`, `src/lib/validation.ts` (dependency-free, throws ValidationError), `src/lib/repositories/index.ts` (interfaces), `src/lib/demo/adaptor.ts` (synthetic fixtures, `demo: true` markers, cross-org scope isolation), `tests/domain.test.ts` (12 passing), `vitest.config.ts` (@/ alias). typecheck/lint/test/build all exit 0.
+- Prompt 4 auth & authorization: complete — `src/server/auth/session.ts` (demo-mode session + fail-closed production Supabase path, no credentials), `src/server/auth/authorize.ts` (server-side identity + role + org/patient scope checks, fail-closed), `src/server/auth/errors.ts` (Unauthorized/Forbidden), `src/app/protected/layout.tsx` (server auth before render), `src/app/protected/dashboard/page.tsx`, `src/app/unauthorized/page.tsx`, `src/app/forbidden/page.tsx`, root public landing. `tests/auth.test.ts` (7 role-boundary tests).
+- Prompt 5 patient workflow: complete — `src/app/protected/patients/{list,create,[id]}/page.tsx` (searchable/filterable list, create with validation errors, detail/timeline), `src/server/actions/patients.ts` (server actions with authorize+validate+audit), `src/lib/audit.ts` (append-only audit, no raw payloads). `tests/patients.test.ts` (validation + scope isolation + audit). 24 tests total passing. typecheck/lint/build exit 0.
 
 ## Next step
-Prompt 4 — Authentication and server-side authorization (Supabase Auth adapter, role/org scope checks on server, unauthorized/forbidden states, role-boundary tests).
+Prompt 6 — Assessment workflow and consent: assessment-session workflow, instructions, consent/purpose/retention disclosure placeholders, cognitive observations, assessment status, timestamps, clinician notes; distinguish missing/not-performed/unavailable/completed; no overall dementia risk; keyboard/screen-reader-friendly flows.
 
 ## Quality gate status (last run)
-- typecheck: 0 | lint: 0 | test: 12 passed | build: 0
+- typecheck: 0 | lint: 0 | test: 24 passed | build: 0
