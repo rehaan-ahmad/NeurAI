@@ -1,3 +1,4 @@
+import { authorize } from "@/server/auth/authorize";
 import { getAssessmentAction } from "@/server/actions/assessments";
 import ResultBreakdown from "@/components/result-breakdown";
 import Link from "next/link";
@@ -6,6 +7,7 @@ import { notFound } from "next/navigation";
 export default async function ResultsDetail({
   params,
 }: Readonly<{ params: { patientId: string; assessmentId: string } }>) {
+  authorize({ requiredRole: "clinician" });
   const result = await getAssessmentAction(params.assessmentId);
   if (!result || "error" in result || result.patientId !== params.patientId) {
     notFound();

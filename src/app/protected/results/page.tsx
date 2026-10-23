@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { authorize } from "@/server/auth/authorize";
 import { listPatientsAction } from "@/server/actions/patients";
 import { listAssessmentsAction } from "@/server/actions/assessments";
 type Patient = { id: string; displayId: string };
 type Assessment = { id: string; patientId: string; status: string; createdAt: string };
 
 export default async function ResultsPage() {
+  authorize({ requiredRole: "clinician" });
   const patientResult = await listPatientsAction();
   if ("error" in patientResult) {
     return (
