@@ -7,6 +7,7 @@ const nav = [
   { href: "/", label: "Dashboard" },
   { href: "/patients", label: "Patients" },
   { href: "/assessments", label: "Assessments" },
+  { href: "/speech", label: "Speech capture" },
   { href: "/results", label: "Results" },
   { href: "/admin", label: "Admin" },
 ];
