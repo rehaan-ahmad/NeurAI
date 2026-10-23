@@ -30,4 +30,4 @@ This file is the single source of truth for cross-session handoff between OpenCo
 - `docs/ARCHITECTURE.md` — Next.js App Router + Vercel + Supabase; Gemini/Grok adapter; voice chat; multi-tenant.
 
 ## Last change
-Committed rebrand + docs + Prompt 2 foundation (Next.js 16 + TS + Tailwind, Inter, env validation, app shell, loading/error/not-found, .env.example, README, .gitignore). typecheck/lint/build all pass (exit 0). Pushed to origin main. Next: Prompt 3 (domain types, validation, demo boundary).
+Committed Prompt 3 (domain types in src/types/domain.ts, dependency-free validation in src/lib/validation.ts, repository interfaces in src/lib/repositories, synthetic demo adaptor in src/lib/demo/adaptor with demo: true markers, 12 unit tests in tests/domain.test.ts, vitest config). typecheck/lint/test/build all pass (exit 0). Pushed to origin main. Next: Prompt 4 (auth & authorization).
