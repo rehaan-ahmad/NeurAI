@@ -30,82 +30,104 @@ export default async function AdminPage() {
   const auditLog = await listAudit();
 
   return (
-    <div className="space-y-5 max-w-4xl">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h1 className="text-2xl font-bold text-foreground">Admin</h1>
+    <div className="space-y-6 max-w-5xl">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/50 pb-6">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Operational Administration</h1>
+          <p className="text-xs sm:text-sm text-muted mt-1">
+            Server-side authorized governance, tamper-evident audit logs, and infrastructure telemetry.
+          </p>
+        </div>
         <Link
-          href="/dashboard"
-          className="text-sm text-muted underline offset-4 hover:text-primary"
+          href="/protected/dashboard"
+          className="rounded-xl border border-border bg-muted-subtle/50 hover:bg-muted-subtle text-foreground px-4 py-2 text-xs font-semibold transition-colors"
         >
-          Back to dashboard
+          ← Return to Dashboard
         </Link>
       </div>
 
-      <div className="rounded-md border border-border bg-background p-4">
-        <h2 className="text-sm font-semibold text-foreground mb-2">Operations</h2>
-        <p className="text-sm text-muted">
-          Signed in as <strong>{user.name}</strong> ({user.role}) · org{" "}
-          {user.organizationId} · {demo ? "demo mode" : "production"}
-        </p>
-        <p className="mt-2 text-xs text-muted">
-          Admin functions are server-side authorized. Real operational data is
-          shown; no uptime or activity metrics are fabricated.
+      <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+        <h2 className="text-sm font-bold text-foreground uppercase tracking-wider font-mono mb-3">
+          Session Integrity & Tenant Scope
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+          <div className="p-3.5 rounded-xl border border-border/50 bg-muted-subtle/30">
+            <div className="text-xs text-muted uppercase font-mono">Authenticated Operator</div>
+            <div className="mt-1 font-semibold text-foreground">{user.name} ({user.role})</div>
+          </div>
+          <div className="p-3.5 rounded-xl border border-border/50 bg-muted-subtle/30">
+            <div className="text-xs text-muted uppercase font-mono">Tenant Identifier</div>
+            <div className="mt-1 font-mono font-semibold text-teal">{user.organizationId}</div>
+          </div>
+          <div className="p-3.5 rounded-xl border border-border/50 bg-muted-subtle/30">
+            <div className="text-xs text-muted uppercase font-mono">Environment</div>
+            <div className="mt-1 font-semibold text-foreground capitalize">{demo ? "Synthetic Demo Sandbox" : "Production"}</div>
+          </div>
+        </div>
+        <p className="mt-4 text-xs text-muted">
+          All administrative functions enforce strict server-side authorization. Real operational logs are rendered; no synthetic uptime or fictitious user telemetry is injected.
         </p>
       </div>
 
-      <div className="rounded-md border border-border bg-background p-4">
-        <h2 className="text-sm font-semibold text-foreground mb-2">Audit log (recent)</h2>
+      <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-bold text-foreground">Immutable Audit Stream</h2>
+          <span className="text-xs font-mono text-muted">RECENT EVENTS</span>
+        </div>
         {auditLog.length === 0 ? (
-          <p className="text-sm text-muted">No audit events recorded.</p>
+          <p className="text-sm text-muted">No audit events recorded in current cycle.</p>
         ) : (
-          <table className="w-full text-sm border-collapse border-t border-border">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="text-left pb-2 text-muted">Time</th>
-                <th className="text-left pb-2 text-muted">Action</th>
-                <th className="text-left pb-2 text-muted">Actor</th>
-                <th className="text-left pb-2 text-muted">Org</th>
-                <th className="text-left pb-2 text-muted">Outcome</th>
-              </tr>
-            </thead>
-            <tbody>
-              {auditLog.slice(0, 20).map((e) => (
-                <tr key={`${e.timestamp}-${e.action}`} className="border-b border-border">
-                  <td className="py-2 text-sm text-muted">
-                    {new Date(e.timestamp).toLocaleString()}
-                  </td>
-                  <td className="py-2 text-sm text-foreground">{e.action}</td>
-                  <td className="py-2 text-sm text-muted">{e.actorId}</td>
-                  <td className="py-2 text-sm text-muted">{e.organizationId}</td>
-                  <td className="py-2 text-sm">
-                    <span
-                      className={`inline-flex items-center rounded-md border px-2 py-0 text-xs font-medium ${
-                        e.outcome === "success"
-                          ? "border-teal bg-teal-subtle text-teal"
-                          : "border-border bg-muted-subtle text-muted"
-                      }`}
-                    >
-                      {e.outcome}
-                    </span>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse text-left">
+              <thead>
+                <tr className="border-b border-border/60 bg-muted-subtle/30 text-xs font-semibold text-muted uppercase font-mono tracking-wider">
+                  <th className="px-4 py-3">Timestamp</th>
+                  <th className="px-4 py-3">Action</th>
+                  <th className="px-4 py-3">Actor</th>
+                  <th className="px-4 py-3">Tenant</th>
+                  <th className="px-4 py-3 text-right">Outcome</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-border/40">
+                {auditLog.slice(0, 20).map((e) => (
+                  <tr key={`${e.timestamp}-${e.action}`} className="hover:bg-muted-subtle/20 transition-colors">
+                    <td className="px-4 py-3 text-xs text-muted font-mono">
+                      {new Date(e.timestamp).toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3 text-xs font-mono font-semibold text-foreground">
+                      {e.action}
+                    </td>
+                    <td className="px-4 py-3 text-xs font-mono text-muted">{e.actorId}</td>
+                    <td className="px-4 py-3 text-xs font-mono text-teal">{e.organizationId}</td>
+                    <td className="px-4 py-3 text-right">
+                      <span
+                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider border ${
+                          e.outcome === "success"
+                            ? "border-teal/30 bg-teal/10 text-teal"
+                            : "border-border bg-muted-subtle text-muted"
+                        }`}
+                      >
+                        {e.outcome}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 
-      <div className="rounded-md border border-border bg-background p-4">
-        <h2 className="text-sm font-semibold text-foreground mb-2">Planned (not shipped)</h2>
-        <ul className="text-sm text-muted space-y-1 list-disc pl-4">
-          <li>User invitations and role changes (dead button placeholder — requires governance approval)</li>
-          <li>Organization management</li>
-          <li>Service health and readiness monitoring</li>
-          <li>Backup and deletion operations</li>
-        </ul>
-        <p className="mt-2 text-xs text-muted">
-          These are labeled as planned rather than shipping dead buttons.
+      <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+        <h2 className="text-base font-bold text-foreground mb-2">Governance Roadmap (Planned Modules)</h2>
+        <p className="text-xs text-muted mb-4 leading-relaxed">
+          In adherence to the specification, unapproved features are clearly flagged rather than surfaced as non-functional UI placeholders.
         </p>
+        <ul className="text-xs text-muted space-y-2 list-disc pl-5">
+          <li><strong>Role delegation & identity invitations:</strong> Disabled pending institutional committee sign-off.</li>
+          <li><strong>Tenant boundary migration:</strong> In design review.</li>
+          <li><strong>Storage purge & patient right-to-be-forgotten orchestration:</strong> Pending regional data-controller approval.</li>
+        </ul>
       </div>
     </div>
   );

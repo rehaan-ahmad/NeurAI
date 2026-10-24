@@ -97,3 +97,28 @@ Before processing any real patient data:
 **Nothing is deployed and nothing is provisioned until you tell me to.** When you're ready, give me
 the decisions above and I'll wire up the backend/AI and prepare for deployment (still without
 deploying until you give final deploy approval).
+
+## Unlocking Demo Restrictions
+
+The app runs in demo mode by default (`DEMO_MODE=true`). To unlock the full functionality locally:
+
+1. **Create/modify a local `.env` file** at the repository root (it is ignored by Git) and add:
+   ```dotenv
+   DEMO_MODE=false
+   ```
+2. **Restart the development server** (`npm run dev` or `yarn dev`).
+   - The `validateEnv()` function will now treat `demo` as `false`.
+   - Required environment variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, etc.) will be validated.
+   - The synthetic demo repositories will be replaced by the real Supabase‑backed ones.
+
+*Optional*: If you prefer the code to be opt‑in for demo mode, change the default flag in `src/lib/env.ts`:
+
+```diff
+- const demo = process.env.DEMO_MODE !== "false";
++ const demo = process.env.DEMO_MODE === "true";
+```
+
+This makes demo mode only active when `DEMO_MODE=true` is explicitly set.
+
+After applying either approach, the UI banner disappears and the application behaves as the production‑ready version (subject to provisioned back‑end services).
+

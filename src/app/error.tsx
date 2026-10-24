@@ -7,6 +7,10 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }>) {
+  if (typeof window !== "undefined" && error) {
+    // Client error logging for diagnostics
+    console.error("[NeurAI Error Boundary]", error.digest ?? error.message);
+  }
   return (
     <main className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center">
       <h1 className="text-2xl font-semibold text-foreground">Something went wrong</h1>
